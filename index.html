@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Timbali serviti</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 1em; }
+    #counter-box {
+      display: inline-block;
+      background: #28a745;
+      color: white;
+      padding: 1em 2em;
+      border-radius: 8px;
+      margin-bottom: 1em;
+      min-width: 120px;
+    }
+    #counter { font-size: 2.5em; }
+    button {
+      font-size: 1.1em;
+      margin: .3em;
+      padding: .5em 1em;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover { opacity: .9; }
+    .plus { background: #007bff; color: white; }
+    .minus { background: #dc3545; color: white; }
+  </style>
+</head>
+<body>
+  <h1>🍽️ Timbali serviti</h1>
+  <div id="counter-box">
+    <div id="counter">…</div>
+  </div>
+  <div>
+    <button class="plus"  onclick="aggiorna(1)">+1</button>
+    <button class="minus" onclick="aggiorna(-1)">−1</button>
+    <button class="plus"  onclick="aggiorna(2)">+2</button>
+    <button class="minus" onclick="aggiorna(-2)">−2</button>
+    <button class="plus"  onclick="aggiorna(3)">+3</button>
+    <button class="minus" onclick="aggiorna(-3)">−3</button>
+  </div>
+
+  <script>
+    const namespace = 'mioevento2025';
+    const key       = 'cliccounter';
+    const baseURL   = 'https://abacus.jasoncameron.dev';
+    const clickSound = new Audio('https://www.soundjay.com/buttons/sounds/button-09.mp3');
+
+    async function aggiorna(amount) {
+      clickSound.currentTime = 0;
+      clickSound.play();
+      const res = await fetch(
+        `${baseURL}/hit/${namespace}/${key}?amount=${amount}`
+      );
+      const js  = await res.json();
+      document.getElementById('counter').textContent = js.count;
+    }
+
+    async function leggi() {
+      const res = await fetch(
+        `${baseURL}/get/${namespace}/${key}`
+      );
+      const js  = await res.json();
+      document.getElementById('counter').textContent = js.count;
+    }
+    window.onload = leggi;
+  </script>
+</body>
+</html>
